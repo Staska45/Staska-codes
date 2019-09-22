@@ -59,11 +59,13 @@ function checkTime(i) {
 <?php
 
 include 'connect-db.php';
+include 'functions.php';
 $today = strtotime("now");
 //echo date("Y-m-d H:i:s", $today) . "<br>";
 $result = $conn->query("SELECT * FROM ".$DB_table_R."
 RIGHT JOIN ".$DB_table_U." ON ".$DB_table_R.".usr_id = ".$DB_table_U.".id_U ORDER BY ".$DB_table_R.".start_date ASC LIMIT 30");
 $j = 0;
+$average = calc_time_taken();
 while($row = $result->fetch_assoc()) {
 if($row['choose_time']>=$row['end_date'])
 {
@@ -76,8 +78,8 @@ echo '<td>' . $row['RegNr']. '</td>';
 $time = new DateTime(date("Y-m-d H:i:s", $today));
 
 if($j>0){
-$num = 10*$j;
-$interval = 'PT'.$num.'M';
+$num = $average*$j;
+$interval = 'PT'.$num.'S';
 $time->add(new DateInterval($interval));
 }
 
