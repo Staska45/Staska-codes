@@ -251,8 +251,8 @@ $conn->query("UPDATE ".$DB_table_R." SET choose_time='$choose_time', usr_id='$us
 or die($conn->connect_error());
 }
 }
-header("Location: index.php");
-//header("Location: userpage.php");
+//header("Location: index.php");
+header("Location: userpage.php?id=".$id."");
 
 }
 
