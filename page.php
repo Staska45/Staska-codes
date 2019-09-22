@@ -59,18 +59,34 @@ function checkTime(i) {
 <?php
 
 include 'connect-db.php';
+$today = strtotime("now");
+//echo date("Y-m-d H:i:s", $today) . "<br>";
 $result = $conn->query("SELECT * FROM ".$DB_table_R."
-RIGHT JOIN ".$DB_table_U." ON ".$DB_table_R.".usr_id = ".$DB_table_U.".id_U ORDER BY ".$DB_table_R.".start_date DESC LIMIT 30");
+RIGHT JOIN ".$DB_table_U." ON ".$DB_table_R.".usr_id = ".$DB_table_U.".id_U ORDER BY ".$DB_table_R.".start_date ASC LIMIT 30");
+$j = 0;
 while($row = $result->fetch_assoc()) {
+if($row['choose_time']>=$row['end_date'])
+{
 echo "<tr>";
 
-echo '<td>' . $row['Name'] .''. $row['Surname']. '</td>';
+echo '<td>' . $row['Name'] .' '. $row['Surname']. '</td>';
 
 echo '<td>' . $row['RegNr']. '</td>';
 
-echo '<td>' . $row['start_date']. '</td>';
+$time = new DateTime(date("Y-m-d H:i:s", $today));
+
+if($j>0){
+$num = 10*$j;
+$interval = 'PT'.$num.'M';
+$time->add(new DateInterval($interval));
+}
+
+echo '<td>' . $time->format('Y-m-d H:i'). '</td>';
 
 echo "</tr>";
+
+$j++;
+}
 }
 
 ?>

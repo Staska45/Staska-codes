@@ -108,6 +108,7 @@ echo '</table>';
 
 echo "<tr> <th>Name</th> <th>Surname</th> <th>Email</th> <th>RegNr</th> <th>Apointment Time</th>";
 echo "<th></th> ";
+echo "<th></th> ";
 echo "<th></th>";
 echo "</tr>";
 
@@ -136,11 +137,14 @@ echo '<td>' . $row['Email']. '</td>';
 
 echo '<td>' . $row['RegNr']. '</td>';
 
-echo '<td>' . $row['reg_date']. '</td>';
+echo '<td>' . $row['choose_time']. '</td>';
+
+if($row['choose_time']>=$row['end_date']){
+echo '<td><a href="end_task.php?id=' . $row['id_R']. '"><img border="0" alt="edit" src="images/Tick.png" width="20" height="20"></a></td>';}
+if($row['choose_time']<$row['end_date']){
+echo '<td><img border="0" alt="edit" src="images/tick_full.png" width="20" height="20"></a></td>';}
 
 echo '<td><a href="edit.php?id=' . $row['id_R']. '"><img border="0" alt="edit" src="images/edit-document.jpg" width="20" height="20"></a></td>';
-
-
 
 echo '<td><a href="delete.php?id=' . $row['id_R'] . '"><img border="0" alt="delete" src="images/delete-button.jpg" width="20" height="20"></a></td>';
 
