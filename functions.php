@@ -2,6 +2,7 @@
 function calc_time_taken()
 
 {
+$average = 0;
 include 'connect-db.php';
 $today = strtotime("now");
 $time = new DateTime(date("Y-m-d H:i:s", $today));
@@ -23,6 +24,9 @@ $total = $total + $difference;
 $x++;
 }
 $average = $total/$x;
+if($average>0){
 return round($average);
+}
+else{return 300;}
 }
 ?>
