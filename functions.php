@@ -29,4 +29,30 @@ return round($average);
 }
 else{return 300;}
 }
+function delay_reg($id)
+{
+include 'connect-db.php';
+$today = strtotime("now");
+//echo date("Y-m-d H:i:s", $today) . "<br>";
+$result = $conn->query("SELECT * FROM ".$DB_table_R."
+RIGHT JOIN ".$DB_table_U." ON usr_id = ".$DB_table_U.".id_U ORDER BY choose_time DESC LIMIT 30");
+$prew_ID = 0;
+while($row = $result->fetch_assoc()) {
+if($row['choose_time']>=$row['end_date'])
+{
+if($row['id_R']  == $id){
+if($prew_ID!=0)
+{
+$curent_time = $row['choose_time'];
+$conn->query("UPDATE ".$DB_table_R." SET choose_time='$perw_time' WHERE id_R='$id' ")
+or die($conn->connect_error());
+$conn->query("UPDATE ".$DB_table_R." SET choose_time='$curent_time' WHERE id_R='$prew_ID' ")
+or die($conn->connect_error());
+}
+}
+$perw_time = $row['choose_time'];
+$prew_ID = $row['id_R'];
+}
+}
+}
 ?>

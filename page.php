@@ -63,12 +63,13 @@ include 'functions.php';
 $today = strtotime("now");
 //echo date("Y-m-d H:i:s", $today) . "<br>";
 $result = $conn->query("SELECT * FROM ".$DB_table_R."
-RIGHT JOIN ".$DB_table_U." ON ".$DB_table_R.".usr_id = ".$DB_table_U.".id_U ORDER BY ".$DB_table_R.".start_date ASC LIMIT 30");
+RIGHT JOIN ".$DB_table_U." ON usr_id = ".$DB_table_U.".id_U ORDER BY choose_time ASC LIMIT 30");
 $j = 0;
 $average = calc_time_taken();
 while($row = $result->fetch_assoc()) {
 if($row['choose_time']>=$row['end_date'])
 {
+if($row['choose_time']){
 echo "<tr>";
 
 echo '<td>' . $row['Name'] .' '. $row['Surname']. '</td>';
@@ -88,6 +89,7 @@ echo '<td>' . $time->format('Y-m-d H:i'). '</td>';
 echo "</tr>";
 
 $j++;
+}
 }
 }
 

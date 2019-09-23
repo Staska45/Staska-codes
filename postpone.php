@@ -1,9 +1,10 @@
- <?php
+ 
+<?php
 
 // connect to the database
 
 include('connect-db.php');
-
+include 'functions.php';
 // number of results to show per page
 
 // check if the 'id' variable is set in URL, and check that it is valid
@@ -18,16 +19,15 @@ $id = $_GET['id'];
 
 
 
-// delete the entry
+//postpone
 
-$conn->query("UPDATE ".$DB_table_R." SET end_date=CURRENT_TIMESTAMP WHERE id_R='$id' ")
-or die($conn->connect_error());
+delay_reg($id);
 
 
 
 // redirect back to the view page
 
-header("Location: admin.php");
+header("Location: index.php?id=".$id."");
 
 }
 
@@ -37,7 +37,7 @@ else
 
 {
 
-header("Location: admin.php");
+header("Location: index.php?id=".$id."");
 
 }
 

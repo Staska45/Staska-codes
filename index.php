@@ -1,172 +1,118 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<?php
+if (isset($_GET['id']) && is_numeric($_GET['id']))
 
-<html>
+{
 
-<head>
+// get id value
 
-<title>REGISTRATION</title>
-<link rel="stylesheet" href="list.css">
-</head>
-
-<body bgcolor="#f2f2f2">
-
-
-
+$id = $_GET['id'];
+}
+$page = $_SERVER['PHP_SELF']."?id=".$id;
+$sec = "5";
+?>
+<html lang="lt"> 
+<head> 
+<meta charset="UTF-8">
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="refresh" content="<?php echo $sec?>;URL='<?php echo $page?>'">
+<script>
+function startTime() {
+    var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1;
+	var yyyy = today.getFullYear();
+	if(dd<10){
+		dd='0'+dd;
+	} 
+	if(mm<10){
+		mm='0'+mm;
+	} 
+	var today2 = yyyy+'-'+mm+'-'+dd;
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+	document.getElementById("DATE").innerHTML = today2;
+    document.getElementById('txt').innerHTML =
+    h + ":" + m + ":" + s;
+    var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+</script>
+<title>Registration successful</title> 
+<style>
+ </style>
+ <link rel="stylesheet" href="list.css">
+</head> 
+<body onload="startTime()">
+<div class="container">
+<table id="header" >
+<tr>
+<th></th>
+<th><div class="top"><div id="DATE" style="font-size:30px;"></div></div>
+<div class="bot"><div id="txt" style="font-size:35px;"></div></div></th>
+<th><div  style="font-size:30px;">Registration successful</div></th>
+<th></th>
+</tr>
+</table>
+</div>
+<table id="sarasas" >
+<hr></hr>
+<tr> <th>User</th> <th>RegNr</th> <th>Apointment Time</th> </tr>
 <?php
 
 include 'connect-db.php';
-// Create connection
+include 'functions.php';
+if (isset($_GET['id']) && is_numeric($_GET['id']))
 
+{
 
-$per_page = 20;
+// get id value
 
+$id = $_GET['id'];
+$today = strtotime("now");
+//echo date("Y-m-d H:i:s", $today) . "<br>";
 $result = $conn->query("SELECT * FROM ".$DB_table_R."
-RIGHT JOIN ".$DB_table_U." ON ".$DB_table_R.".usr_id = ".$DB_table_U.".id_U ORDER BY ".$DB_table_R.".start_date DESC");
-
-$total_results = $result->num_rows;
-
-$total_pages = ceil($total_results / $per_page);
-
-
-
-// check if the 'page' variable is set in the URL
-
-if (isset($_GET['page']) && is_numeric($_GET['page']))
-
-{
-
-$show_page = $_GET['page'];
-
-
-
-// make sure the $show_page value is valid
-
-if ($show_page > 0 && $show_page <= $total_pages)
-
-{
-
-$start = ($show_page -1) * $per_page;
-
-$end = $start + $per_page;
-
-}
-
-else
-
-{
-
-// error - show first set of results
-
-$start = 0;
-
-$end = $per_page;
-
-}
-
-}
-
-else
-
-{
-
-// if page isn't set, show first set of results
-
-$start = 0;
-
-$end = $per_page;
-
-}
-
-
-
-// display pagination
-
-
-echo '<table id="header1">';
-echo '<tr><th><span style="float:center;">Registration</span><th></th><th></th></th></tr>';
-echo "<tr><td><a href='page.php'>Display Board</a> | <b>User Page:</b> ";
-for ($i = 1; $i <= $total_pages; $i++)
-
-{
-
-echo "<a href='index.php?page=$i'>$i</a> ";
-
-}
-
-echo "</td></tr>";
-echo '</table>';
-echo '<table id="header">';
-echo '<tr><td><a href="new.php"><img border="0" alt="New user" src="images/new.png" width="50" height="50"></a></tr>';
-echo '</table>';
-
-
-// display data in table
-?>
-<table id="sarasas">
-<?php
-//echo "<table border='1' cellpadding='10' id='sarasas'>";
-
-echo "<tr> <th>Name</th> <th>Surname</th> <th>Email</th> <th>RegNr</th> <th>Apointment Time</th>";
-echo "<th></th> ";
-echo "<th></th> ";
-echo "<th></th>";
-echo "</tr>";
-
-
-// loop through results of database query, displaying them in the table
-
-for ($i = $start; $i < $end; $i++)
-
-{
-
-// make sure that PHP doesn't try to show results that don't exist
-
-
-if ($i == $total_results) { break; }
-
-$j=$i+1;
-// echo out the contents of each row into a table
+RIGHT JOIN ".$DB_table_U." ON usr_id = ".$DB_table_U.".id_U ORDER BY choose_time ASC LIMIT 30");
+$j = 0;
+$average = calc_time_taken();
 while($row = $result->fetch_assoc()) {
+if($row['choose_time']>=$row['end_date'])
+{
+if($row['id_R']  == $id){
 echo "<tr>";
 
-echo '<td>' . $row['Name'] . '</td>';
-
-echo '<td>' . $row['Surname']. '</td>';
-
-echo '<td>' . $row['Email']. '</td>';
+echo '<td>' . $row['Name'] .' '. $row['Surname']. '</td>';
 
 echo '<td>' . $row['RegNr']. '</td>';
 
-echo '<td>' . $row['choose_time']. '</td>';
+$time = new DateTime(date("Y-m-d H:i:s", $today));
 
-if($row['choose_time']>=$row['end_date']){
-echo '<td><a href="end_task.php?id=' . $row['id_R']. '"><img border="0" alt="edit" src="images/Tick.png" width="20" height="20"></a></td>';}
-if($row['choose_time']<$row['end_date']){
-echo '<td><img border="0" alt="edit" src="images/tick_full.png" width="20" height="20"></a></td>';}
+if($j>0){
+$num = $average*$j;
+$interval = 'PT'.$num.'S';
+$time->add(new DateInterval($interval));
+}
 
-echo '<td><a href="edit.php?id=' . $row['id_R']. '"><img border="0" alt="edit" src="images/edit-document.jpg" width="20" height="20"></a></td>';
-
-echo '<td><a href="delete.php?id=' . $row['id_R'] . '"><img border="0" alt="delete" src="images/delete-button.jpg" width="20" height="20"></a></td>';
-
-
+echo '<td>' . $time->format('Y-m-d H:i'). '</td>';
 
 echo "</tr>";
 }
+$j++;
 }
-// close table>
-
-echo "</table>";
-
-
-
-// pagination
+}
+}
+echo '</table>';
 echo '<table id="header1">';
 echo '<tr><td><a href="new.php"><img border="0" alt="New user" src="images/new.png" width="50" height="50"></a></tr>';
-echo '</table>';
-
+echo '<tr><td><a href="postpone.php?id='.$id.'"><img border="0" alt="Postpone" ></a></tr>';
 ?>
+</table>
+</body> 
+</html> 
 
-
-</body>
-
-</html>

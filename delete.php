@@ -28,7 +28,7 @@ or die($conn->connect_error());
 
 // redirect back to the view page
 
-header("Location: index.php");
+header("Location: admin.php");
 
 }
 
@@ -38,7 +38,7 @@ else
 
 {
 
-header("Location: index.php");
+header("Location: admin.php");
 
 }
 
