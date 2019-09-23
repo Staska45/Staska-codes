@@ -44,9 +44,9 @@ if($row['id_R']  == $id){
 if($prew_ID!=0)
 {
 $curent_time = $row['choose_time'];
-$conn->query("UPDATE ".$DB_table_R." SET choose_time='$perw_time' WHERE id_R='$id' ")
+$conn->query("UPDATE ".$DB_table_R." SET choose_time='$perw_time', end_date='$perw_time' WHERE id_R='$id' ")
 or die($conn->connect_error());
-$conn->query("UPDATE ".$DB_table_R." SET choose_time='$curent_time' WHERE id_R='$prew_ID' ")
+$conn->query("UPDATE ".$DB_table_R." SET choose_time='$curent_time', end_date='$curent_time' WHERE id_R='$prew_ID' ")
 or die($conn->connect_error());
 }
 }
